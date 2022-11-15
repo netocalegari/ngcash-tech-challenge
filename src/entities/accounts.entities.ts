@@ -10,8 +10,8 @@ class Account {
   @PrimaryGeneratedColumn('uuid')
   readonly id!: string;
 
-  @Column({default: 100.00})
-  balance!: number;
+  @Column()
+  balance: number = 100.00;
 
   @OneToMany(() => Transaction, (transaction) => transaction.id)
   transactions!: Transaction[];
