@@ -12,7 +12,7 @@ class User {
   @PrimaryGeneratedColumn('uuid')
   readonly id!: string;
 
-  @Column()
+  @Column({unique: true})
   username!: string;
 
   @Column()

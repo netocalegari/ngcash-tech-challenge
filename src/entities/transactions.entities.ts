@@ -6,7 +6,7 @@ import { Entity,
 } from "typeorm";
 import { Account } from "./accounts.entities";
 
-@Entity('transacions')
+@Entity('transactions')
 class Transaction {
   @PrimaryGeneratedColumn('uuid')
   readonly id!: string;
