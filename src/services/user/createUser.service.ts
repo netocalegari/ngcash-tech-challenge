@@ -3,7 +3,7 @@ import AppDataSource from "../../data-source";
 import { Account } from "../../entities/accounts.entities";
 import { User } from "../../entities/users.entities";
 import { AppError } from "../../errors/appError";
-import { IUser, IUserRequest } from "../../interfaces/user";
+import { IUserRequest } from "../../interfaces/user";
 
 const createUserService = async ({username, password}: IUserRequest): Promise<User> => {
   const userRepository = AppDataSource.getRepository(User);
@@ -36,10 +36,13 @@ const createUserService = async ({username, password}: IUserRequest): Promise<Us
   user.account_id = newAccount;
 
   userRepository.create(user);
-  userRepository.save(user);
+  await userRepository.save(user);
 
+  const createdUser = await userRepository.findOneBy({
+    username: username
+  });
 
-  return user;
+  return createdUser!;
 }
 
 export default createUserService;
