@@ -1,9 +1,14 @@
 import { Router } from "express";
-import { createUserController } from "../controllers/user.controllers";
+import { checkBalanceController, createUserController, makeTransactionController } from "../controllers/user.controllers";
+import ensureAuthMiddleware from "../middlewares/ensureAuth.middleware";
+// import { createUserSchema } from "../middlewares/ensurePasswordSafety.middleware";
 // import ensurePasswordSafetyMiddleware from "../middlewares/ensurePasswordSafety.middleware";
 
 const userRoutes = Router();
 
-userRoutes.post('', createUserController);
+userRoutes.post('/register', createUserController);
+userRoutes.get('/dashboard', ensureAuthMiddleware, checkBalanceController);
+userRoutes.post('/dashboard/transaction', ensureAuthMiddleware, makeTransactionController);
+
 
 export default userRoutes;

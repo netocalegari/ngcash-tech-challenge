@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/login', sessionRoutes);
-app.use('/register', userRoutes);
+app.use('', userRoutes);
 
 app.use((err: Error, request: Request, response: Response, next: NextFunction) => {
   if (err instanceof AppError) {

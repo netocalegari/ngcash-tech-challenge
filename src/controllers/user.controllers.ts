@@ -1,7 +1,9 @@
 import { instanceToPlain } from "class-transformer";
 import { Request, Response } from "express";
 import { AppError, handleError } from "../errors/appError";
+import checkBalanceService from "../services/user/checkBalance.service";
 import createUserService from "../services/user/createUser.service";
+import makeTransaction from "../services/user/transaction.service";
 
 const createUserController = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -17,4 +19,34 @@ const createUserController = async (req: Request, res: Response) => {
   };
 };
 
-export { createUserController }
+const checkBalanceController = async (req: Request, res: Response) => {
+  const id = req.user.id;
+
+  try {
+    const balance = await checkBalanceService(id);
+
+    return res.status(200).json(balance);
+  } catch(err) {
+    if (err instanceof AppError) {
+      handleError(err, res);
+    };
+  };
+};
+
+const makeTransactionController = async (req: Request, res: Response) => {
+  const fromUserId = req.user.id;
+  const { toUsername } = req.body;
+
+  try {
+    const transaction = await makeTransaction(fromUserId, toUsername);
+
+    return res.status(200).json(transaction);
+    } catch(err) {
+      if (err instanceof AppError) {
+        handleError(err, res);
+    };
+  };
+
+}
+
+export { createUserController, checkBalanceController, makeTransactionController }

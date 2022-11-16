@@ -14,6 +14,10 @@ const createUserService = async ({username, password}: IUserRequest): Promise<Us
     throw new AppError(400, 'Missing username');
   };
 
+  if (username.length < 3) {
+    throw new AppError(400, 'Username must be at least 3 characters long');
+  };
+
   if (!password) {
     throw new AppError(400, 'Missing password');
   };

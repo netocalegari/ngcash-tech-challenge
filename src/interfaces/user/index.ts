@@ -10,4 +10,9 @@ interface IUserRequest {
   password: string;
 };
 
-export { IUser, IUserRequest };
+interface ITransactionRequest {
+  fromUserId: string;
+  toUsername: string;
+};
+
+export { IUser, IUserRequest, ITransactionRequest };
