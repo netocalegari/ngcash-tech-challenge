@@ -7,7 +7,7 @@ import filterCashInTransactionsService from "../services/user/filterCashInTransa
 import filterCashOutTransactionsService from "../services/user/filterCashOutTransactions.service";
 import filterDateTransactionsService from "../services/user/filterDateTransactions.service";
 import listTransactionsService from "../services/user/listTransactions.service";
-import makeTransaction from "../services/user/transaction.service";
+import makeTransaction from "../services/user/makeTransaction.service";
 
 const createUserController = async (req: Request, res: Response) => {
   const { username, password } = req.body;

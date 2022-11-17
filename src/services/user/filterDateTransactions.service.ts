@@ -3,7 +3,7 @@ import { Transaction } from "../../entities/transactions.entities";
 import { User } from "../../entities/users.entities";
 import { AppError } from "../../errors/appError";
 
-const filterDateTransactionsService = async (id: string, date: Date) => {
+const filterDateTransactionsService = async (id: string, date: Date): Promise<Transaction[]> => {
   const userRepository = AppDataSource.getRepository(User);
   const transactionsRepository = AppDataSource.getRepository(Transaction);
 
