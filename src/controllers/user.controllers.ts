@@ -3,6 +3,9 @@ import { Request, Response } from "express";
 import { AppError, handleError } from "../errors/appError";
 import checkBalanceService from "../services/user/checkBalance.service";
 import createUserService from "../services/user/createUser.service";
+import filterCashInTransactionsService from "../services/user/filterCashInTransactions.service";
+import filterCashOutTransactionsService from "../services/user/filterCashOutTransactions.service";
+import filterDateTransactionsService from "../services/user/filterDateTransactions.service";
 import listTransactionsService from "../services/user/listTransactions.service";
 import makeTransaction from "../services/user/transaction.service";
 
@@ -41,7 +44,7 @@ const makeTransactionController = async (req: Request, res: Response) => {
   try {
     const transaction = await makeTransaction({fromUserId, username, amount});
 
-    return res.status(200).json(transaction);
+    return res.status(200).json(instanceToPlain(transaction));
     } catch(err) {
       if (err instanceof AppError) {
         handleError(err, res);
@@ -63,4 +66,53 @@ const listTransactionsController = async (req: Request, res: Response) => {
   };
 };
 
-export { createUserController, checkBalanceController, makeTransactionController, listTransactionsController }
+const filterDateTransactionsController = async (req: Request, res: Response) => {
+  const id = req.user.id;
+  const { date } = req.body;
+
+  try {
+    const transactions = await filterDateTransactionsService(id, date);
+
+    return res.status(200).json(transactions);
+  } catch(err) {
+    if(err instanceof AppError) {
+      handleError(err, res);
+    };
+  };
+};
+
+const filterCashInTransactionsController = async (req: Request, res: Response) => {
+  const id = req.user.id;
+  const { cashIn } = req.body;
+  try {
+    const transactions = await filterCashInTransactionsService(id);
+
+    return res.status(200).json(transactions);
+  } catch(err) {
+    if (err instanceof AppError) {
+      handleError(err, res);
+    };
+  };
+};
+
+const filterCashOutTransactionsController = async (req: Request, res: Response) => {
+  const id = req.user.id;
+  const { cashOut } = req.body;
+  try {
+    const transactions = await filterCashOutTransactionsService(id);
+
+    return res.status(200).json(transactions);
+  } catch(err) {
+    if (err instanceof AppError) {
+      handleError(err, res);
+    };
+  };
+};
+
+export { createUserController,
+  checkBalanceController,
+  makeTransactionController,
+  listTransactionsController,
+  filterDateTransactionsController,
+  filterCashInTransactionsController,
+  filterCashOutTransactionsController }

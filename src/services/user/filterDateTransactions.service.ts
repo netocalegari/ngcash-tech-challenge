@@ -3,32 +3,29 @@ import { Transaction } from "../../entities/transactions.entities";
 import { User } from "../../entities/users.entities";
 import { AppError } from "../../errors/appError";
 
-const listTransactionsService = async (id: string): Promise<Transaction[]> => {
-  const transactionsRepository = AppDataSource.getRepository(Transaction);
+const filterDateTransactionsService = async (id: string, date: Date) => {
   const userRepository = AppDataSource.getRepository(User);
+  const transactionsRepository = AppDataSource.getRepository(Transaction);
 
   const user = await userRepository.findOneBy({
     id: id
   });
 
-  if (!user ) {
+  if (!user) {
     throw new AppError(404, 'User not found');
   };
 
   const transactions = await transactionsRepository.find({
-    where: [{
-      debited_account: user.account_id
-    },
-    {
-      credited_account: user.account_id
-    }]
+    where: {
+      created_at: date
+    }
   });
 
   if (transactions.length < 1) {
-    throw new AppError(404, 'No transactions have been made involving this account')
+    throw new AppError(404, 'No transactions found at this date');
   };
 
   return transactions;
 };
 
-export default listTransactionsService;
+export default filterDateTransactionsService;

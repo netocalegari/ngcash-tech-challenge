@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Entity, 
   PrimaryGeneratedColumn,
   Column,
@@ -11,6 +12,7 @@ class Account {
   readonly id!: string;
 
   @Column()
+  @Exclude()
   balance: number = 100.00;
 
   @OneToMany(() => Transaction, (transaction) => transaction.id)
