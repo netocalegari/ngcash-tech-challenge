@@ -12,7 +12,8 @@ interface IUserRequest {
 
 interface ITransactionRequest {
   fromUserId: string;
-  toUsername: string;
+  username: string;
+  amount: number;
 };
 
 export { IUser, IUserRequest, ITransactionRequest };

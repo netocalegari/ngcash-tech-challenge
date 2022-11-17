@@ -19,7 +19,7 @@ class User {
   @Exclude()
   password!: string;
 
-  @OneToOne(() => Account, {cascade: true})
+  @OneToOne(() => Account, {cascade: true, eager: true})
   @JoinColumn()
   account_id!: Account;
 };

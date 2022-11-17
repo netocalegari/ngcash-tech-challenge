@@ -25,7 +25,7 @@ const createSessionService = async ({username, password}: ISessionRequest): Prom
 
   const token = jwt.sign({
     id: user.id,
-    username: user.username
+    username: user.username,
   },
   process.env.SECRET_KEY as string,
   {

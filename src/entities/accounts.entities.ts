@@ -14,7 +14,10 @@ class Account {
   balance: number = 100.00;
 
   @OneToMany(() => Transaction, (transaction) => transaction.id)
-  transactions!: Transaction[];
+  credited_transactions!: Transaction[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.id)
+  debited_transactions!: Transaction[];
 };
 
 export { Account };

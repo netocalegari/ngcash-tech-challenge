@@ -35,10 +35,10 @@ const checkBalanceController = async (req: Request, res: Response) => {
 
 const makeTransactionController = async (req: Request, res: Response) => {
   const fromUserId = req.user.id;
-  const { toUsername } = req.body;
+  const { username, amount } = req.body;
 
   try {
-    const transaction = await makeTransaction(fromUserId, toUsername);
+    const transaction = await makeTransaction({fromUserId, username, amount});
 
     return res.status(200).json(transaction);
     } catch(err) {

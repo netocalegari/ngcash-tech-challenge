@@ -8,7 +8,7 @@ const userRoutes = Router();
 
 userRoutes.post('/register', createUserController);
 userRoutes.get('/dashboard', ensureAuthMiddleware, checkBalanceController);
-userRoutes.post('/dashboard/transaction', ensureAuthMiddleware, makeTransactionController);
+userRoutes.patch('/dashboard/transaction', ensureAuthMiddleware, makeTransactionController);
 
 
 export default userRoutes;
