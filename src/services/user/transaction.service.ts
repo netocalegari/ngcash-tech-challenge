@@ -5,7 +5,7 @@ import { User } from "../../entities/users.entities";
 import { AppError } from "../../errors/appError";
 import { ITransactionRequest } from "../../interfaces/user";
 
-const makeTransaction = async ({fromUserId, username, amount}: ITransactionRequest) => {
+const makeTransaction = async ({fromUserId, username, amount}: ITransactionRequest): Promise<Transaction> => {
   const userRepository = AppDataSource.getRepository(User);
   const accountRepository = AppDataSource.getRepository(Account);
   const transactionRepository = AppDataSource.getRepository(Transaction);

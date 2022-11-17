@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { AppError, handleError } from "../errors/appError";
 import checkBalanceService from "../services/user/checkBalance.service";
 import createUserService from "../services/user/createUser.service";
+import listTransactionsService from "../services/user/listTransactions.service";
 import makeTransaction from "../services/user/transaction.service";
 
 const createUserController = async (req: Request, res: Response) => {
@@ -46,7 +47,20 @@ const makeTransactionController = async (req: Request, res: Response) => {
         handleError(err, res);
     };
   };
+};
 
-}
+const listTransactionsController = async (req: Request, res: Response) => {
+  const id = req.user.id;
 
-export { createUserController, checkBalanceController, makeTransactionController }
+  try {
+    const transactions = await listTransactionsService(id);
+    
+    return res.status(200).json(transactions);
+  } catch(err) {
+    if (err instanceof AppError) {
+      handleError(err, res);
+    };
+  };
+};
+
+export { createUserController, checkBalanceController, makeTransactionController, listTransactionsController }
