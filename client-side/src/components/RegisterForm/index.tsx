@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import api from '../../services/api';
-interface ILoginRequest {
+
+interface IRegisterRequest {
   username: string;
   password: string;
 };
 
-function LoginForm() {
+function RegisterForm() {
 
   const navigate = useNavigate();
 
@@ -17,32 +18,26 @@ function LoginForm() {
     password: yup.string().required('Campo obrigatório'),
   });
 
-  const { register, handleSubmit, formState: { errors }} = useForm<ILoginRequest> ({
+  const { register, handleSubmit, formState: { errors }} = useForm<IRegisterRequest> ({
     resolver: yupResolver(schema),
   });
-
-  function handleSubmitedData(data: ILoginRequest) {
-    api.post('/login', data)
+  
+  function onSubmit(data: IRegisterRequest) {
+    api.post('/register', data)
       .then((res) => {
-        if (res.status === 200) {
-          localStorage.clear();
-          localStorage.setItem('@ngcash:token', res.data.token);
-          navigate('/dashboard', {replace: true});
-        }
+        if (res.status === 201) {
+          navigate('/login');
+        };
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  function redirectToRegisterPage() {
-    navigate('/register');
-  };
-
   return (
     <div>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit(handleSubmitedData)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="">username</label>
           <input 
@@ -65,14 +60,8 @@ function LoginForm() {
 
         <button type='submit'>Logar</button>
       </form>
-
-      <div>
-        <p>Não possui uma conta? </p>
-        <button onClick={redirectToRegisterPage}>Cadastre-se</button>
-      </div>
     </div>
-  );
-
+  )
 };
 
-export default LoginForm;
+export default RegisterForm;
