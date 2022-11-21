@@ -43,9 +43,7 @@ function LoginForm() {
     <Main>
       <h1>Login</h1>
       <div className='container'>
-        <form 
-          onSubmit={handleSubmit(handleSubmitedData)}
-        >
+        <form onSubmit={handleSubmit(handleSubmitedData)}>
           <div className='input-holder'>
             <label htmlFor="">Username</label>
             <input 

@@ -4,6 +4,7 @@ import api from "../../services/api";
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Header from "../../components/Header";
 
 // interface IUserResponse {
 //   account_id: {
@@ -32,8 +33,8 @@ function DashboardPage() {
   const [transactions, setTransactions] = useState<ITransactionResponse[]>([]);
   const [display, setDisplay] = useState<ITransactionResponse[]>([...transactions]);
   const [dateTransactions, setDateTransactions] = useState<ITransactionResponse[]>([]);
-  const [cashInTransactions, setCashInTransactions] = useState<ITransactionResponse[]>([]);
-  const [cashOutTransactions, setCashOutTransactions] = useState<ITransactionResponse[]>([]);
+  // const [cashInTransactions, setCashInTransactions] = useState<ITransactionResponse[]>([]);
+  // const [cashOutTransactions, setCashOutTransactions] = useState<ITransactionResponse[]>([]);
   const [date, setDate] = useState<string>('');
 
   const navigate = useNavigate();
@@ -46,11 +47,6 @@ function DashboardPage() {
   const { register, handleSubmit, formState: { errors }} = useForm<ITransactionRequest> ({
     resolver: yupResolver(schema),
   });
-
-  function logOut() {
-    sessionStorage.clear();
-    navigate('/login');
-  };
 
   function makeTransaction(data: ITransactionRequest) {
     api.patch('/dashboard/transaction', data, {
@@ -143,6 +139,8 @@ function DashboardPage() {
 
   return (
     <>
+      <Header/>
+      
       <div>
         <h2>Balance</h2>
         <p>{userBalance}</p>
@@ -217,10 +215,6 @@ function DashboardPage() {
           <p>Nada para mostrar</p>
         </div>
       }
-
-      <div>
-        <button onClick={logOut}>Logout</button>
-      </div>
     </>
   );
 }
