@@ -5,16 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Header from "../../components/Header";
-
-// interface IUserResponse {
-//   account_id: {
-//     balance: number;
-//     id: string;
-//   };
-//   id: string;
-//   password: string;
-//   username: string;
-// };
+import { FormContainer, ListContainer, ListHeader, Main } from "./styles";
 
 interface ITransactionResponse {
   created_at: string;
@@ -140,67 +131,85 @@ function DashboardPage() {
   return (
     <>
       <Header/>
+
+      <Main>
+        <FormContainer>
+          <form onSubmit={handleSubmit(makeTransaction)}>
+            <div className="input-holder">
+              <label htmlFor="">Conta destino</label>
+              <input 
+                type="text" 
+                placeholder="Username destino"
+                {...register('username')}
+              />
+            </div>
+            
+            <div className="input-holder">
+              <label htmlFor="">Valor</label>
+              <input 
+                type="text" 
+                placeholder="Quantidade a enviar"
+                {...register('amount')}
+              />            
+            </div>
+
+            <button type="submit">Enviar</button>
+          </form>
+
+          <div className="balance-holder">
+            <p id="balance-text">Balance:</p>
+            <p id="value-amount">R${userBalance}</p>
+          </div>
+        </FormContainer>
       
-      <div>
-        <h2>Balance</h2>
-        <p>{userBalance}</p>
-      </div>
-
-      <div>
-        <button onClick={showAllTransactions}>Todos</button>
-        <button onClick={filterCashIn}>Entrada</button>
-        <button onClick={filterCashOut}>Saída</button>
-      </div>
-
-      {display.length > 0 ? (
         <div>
-          <h2>Transactions</h2>
-          <ul>
-            {display.map((transaction) => (
-              <li key={transaction.id}>
-                <p>{transaction.created_at}</p>
-                <p>{transaction.value}</p>
-              </li>
-            ))}
-          </ul>
+        <ListHeader>
+          <h3>Transações</h3>
+          <div className="button-holder">
+            <button onClick={showAllTransactions}>Todos</button>
+            <button onClick={filterCashIn}>Entrada</button>
+            <button onClick={filterCashOut}>Saída</button>
+          </div>
+
+          <form onSubmit={filterByDate}>
+
+          <input type="date"
+            onChange={(event) => setDate(event.target.value)}
+            id='date-input'
+          />
+
+          <button type="submit">Filtrar</button>
+
+        </form>
+        </ListHeader>
+
+        {display.length > 0 ? (
+          <ListContainer>
+            <ul>
+              {display.map((transaction) => (
+                <li key={transaction.id}>
+                  <p id="date">Data: {transaction.created_at}</p>
+                  <p>R${transaction.value}</p>
+                </li>
+              ))}
+            </ul>
+          </ListContainer>
+        ) :
+
+        <h1>Nenhuma transação realizada</h1>
+      }
+
         </div>
-      ) :
 
-      <h1>Nenhuma transação realizada</h1>
-    }
+      </Main>
 
-      <form onSubmit={handleSubmit(makeTransaction)}>
-        <label htmlFor="">Conta destino</label>
-        <input 
-          type="text" 
-          placeholder="Username destino"
-          {...register('username')}
-        />
-        
-        <label htmlFor=""></label>
-        <input 
-          type="text" 
-          placeholder="Quantidade a enviar"
-          {...register('amount')}
-        />
-
-        <button type="submit">Enviar</button>
-      </form>
       
-      <form onSubmit={filterByDate}>
-        <h2>Filtrar</h2>
 
-        <label htmlFor="">Dia da transação</label>
-        <input type="date"
-          onChange={(event) => setDate(event.target.value)}
-        />
-
-        <button type="submit">Filtrar</button>
-
-      </form>
+      
+      
 
       {
-        dateTransactions.length > 0 ? (
+        dateTransactions.length > 0 && (
           <ul>
             {dateTransactions.map((transaction) => (
               <li key={transaction.id}>
@@ -209,11 +218,7 @@ function DashboardPage() {
               </li>
             ))}
           </ul>
-        ) :
-
-        <div>
-          <p>Nada para mostrar</p>
-        </div>
+        )
       }
     </>
   );
