@@ -25,8 +25,8 @@ function LoginForm() {
     api.post('/login', data)
       .then((res) => {
         if (res.status === 200) {
-          localStorage.clear();
-          localStorage.setItem('@ngcash:token', res.data.token);
+          sessionStorage.clear();
+          sessionStorage.setItem('@ngcash:token', res.data.token);
           navigate('/dashboard', {replace: true});
         }
       })
@@ -56,7 +56,7 @@ function LoginForm() {
         <div>
           <label htmlFor="">Senha</label>
           <input 
-            type="text"
+            type="password"
             placeholder='digite sua senha'
             {...register('password')}
           />

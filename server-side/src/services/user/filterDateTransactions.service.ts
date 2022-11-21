@@ -21,7 +21,7 @@ const filterDateTransactionsService = async (id: string, date: Date): Promise<Tr
     }
   });
 
-  if (transactions.length < 1) {
+  if (transactions.length < 1 || !date) {
     throw new AppError(404, 'No transactions found at this date');
   };
 

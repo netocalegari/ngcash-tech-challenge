@@ -1,15 +1,7 @@
 import api from "../../services/api";
+import { useEffect, useState } from 'react';
 
 function Balance() {
-  const token = localStorage.getItem('@kenziehub:token');
-  console.log(token);
-  const balance = api.get('/dashboard');
-
-  return (
-    <div>
-      <span></span>
-    </div>
-  );
 };
 
 export default Balance;

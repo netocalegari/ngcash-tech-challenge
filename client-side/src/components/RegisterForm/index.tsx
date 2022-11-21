@@ -51,7 +51,7 @@ function RegisterForm() {
         <div>
           <label htmlFor="">Senha</label>
           <input 
-            type="text"
+            type="password"
             placeholder='digite sua senha'
             {...register('password')}
           />

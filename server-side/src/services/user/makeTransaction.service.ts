@@ -42,7 +42,6 @@ const makeTransaction = async ({fromUserId, username, amount}: ITransactionReque
 
   const receivingUserAccount = receivingUser.account_id;
 
-
   await accountRepository.update(
     sendingUserAccount!.id,
     {
