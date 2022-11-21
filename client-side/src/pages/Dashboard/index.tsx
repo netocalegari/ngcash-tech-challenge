@@ -30,8 +30,13 @@ function DashboardPage() {
   const token = sessionStorage.getItem("@ngcash:token");
   const [userBalance, setUserBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<ITransactionResponse[]>([]);
+  const [display, setDisplay] = useState<ITransactionResponse[]>([...transactions]);
   const [dateTransactions, setDateTransactions] = useState<ITransactionResponse[]>([]);
+  const [cashInTransactions, setCashInTransactions] = useState<ITransactionResponse[]>([]);
+  const [cashOutTransactions, setCashOutTransactions] = useState<ITransactionResponse[]>([]);
   const [date, setDate] = useState<string>('');
+
+  const navigate = useNavigate();
 
   const schema = yup.object().shape({
     username: yup.string().required('Campo obrigatório'),
@@ -41,8 +46,6 @@ function DashboardPage() {
   const { register, handleSubmit, formState: { errors }} = useForm<ITransactionRequest> ({
     resolver: yupResolver(schema),
   });
-
-  const navigate = useNavigate();
 
   function logOut() {
     sessionStorage.clear();
@@ -72,12 +75,52 @@ function DashboardPage() {
       },
     })
     .then((res) => {
+      cashOutTransactions.length > 0 && (
+        setCashOutTransactions([])
+      );
+      cashInTransactions.length > 0 && (
+        setCashInTransactions([])
+      );
       setDateTransactions(res.data)
     })
     .catch(err => console.log(err));
   };
 
+  function filterCashIn() {
+    api.get('/dashboard/transaction/filter/cashIn', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
+      cashOutTransactions.length > 0 && (
+        setCashOutTransactions([])
+      );
+      setCashInTransactions(res.data);
+    })
+    .catch((err) => console.log(err));
+  };
+
+  function filterCashOut() {
+    api.get('/dashboard/transaction/filter/cashOut', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
+      cashInTransactions.length > 0 && (
+        setCashInTransactions([])
+      );
+      setCashOutTransactions(res.data);
+    })
+    .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    };
+
     api
       .get("/dashboard", {
         headers: {
@@ -97,6 +140,7 @@ function DashboardPage() {
       })
       .then((res) => {
         setTransactions(res.data);
+        setDisplay([...transactions]);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -153,9 +197,39 @@ function DashboardPage() {
       </form>
 
       {
-        dateTransactions.length > 0 && (
+        dateTransactions.length > 0 ? (
           <ul>
             {dateTransactions.map((transaction) => (
+              <li key={transaction.id}>
+                <p>{transaction.created_at}</p>
+                <p>{transaction.value}</p>
+              </li>
+            ))}
+          </ul>
+        ) :
+
+        <div>
+          <p>Nada para mostrar</p>
+        </div>
+      }
+
+      {
+        cashInTransactions.length > 0 && (
+          <ul>
+            {cashInTransactions.map((transaction) => (
+              <li key={transaction.id}>
+                <p>{transaction.created_at}</p>
+                <p>{transaction.value}</p>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      {
+        cashOutTransactions.length > 0 && (
+          <ul>
+            {cashOutTransactions.map((transaction) => (
               <li key={transaction.id}>
                 <p>{transaction.created_at}</p>
                 <p>{transaction.value}</p>
@@ -166,8 +240,8 @@ function DashboardPage() {
       }
 
       <div>
-        <button>Entrada</button>
-        <button>Saída</button>
+        <button onClick={filterCashIn}>Entrada</button>
+        <button onClick={filterCashOut}>Saída</button>
       </div>
 
       <div>
