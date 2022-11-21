@@ -26,15 +26,11 @@ interface ITransactionRequest {
   amount: number;
 };
 
-interface IDateFilterRequest {
-  date: string;
-};
-
 function DashboardPage() {
   const token = sessionStorage.getItem("@ngcash:token");
-  // const [userDashboard, setUserDashboard] = useState<IUserResponse>();
   const [userBalance, setUserBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<ITransactionResponse[]>([]);
+  const [dateTransactions, setDateTransactions] = useState<ITransactionResponse[]>([]);
   const [date, setDate] = useState<string>('');
 
   const schema = yup.object().shape({
@@ -76,7 +72,7 @@ function DashboardPage() {
       },
     })
     .then((res) => {
-      console.log(res)
+      setDateTransactions(res.data)
     })
     .catch(err => console.log(err));
   };
@@ -146,15 +142,6 @@ function DashboardPage() {
       
       <form onSubmit={filterByDate}>
         <h2>Filtrar</h2>
-        <input type="radio"
-          value='cashIn'
-        />
-        <label htmlFor="">Entrada</label>
-
-        <input type="radio"
-          value='cashOut'
-        />
-        <label htmlFor="">Saída</label>
 
         <label htmlFor="">Dia da transação</label>
         <input type="date"
@@ -164,6 +151,24 @@ function DashboardPage() {
         <button type="submit">Filtrar</button>
 
       </form>
+
+      {
+        dateTransactions.length > 0 && (
+          <ul>
+            {dateTransactions.map((transaction) => (
+              <li key={transaction.id}>
+                <p>{transaction.created_at}</p>
+                <p>{transaction.value}</p>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      <div>
+        <button>Entrada</button>
+        <button>Saída</button>
+      </div>
 
       <div>
         <button onClick={logOut}>Logout</button>
