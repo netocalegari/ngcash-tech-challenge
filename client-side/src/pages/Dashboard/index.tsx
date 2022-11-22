@@ -24,8 +24,6 @@ function DashboardPage() {
   const [transactions, setTransactions] = useState<ITransactionResponse[]>([]);
   const [display, setDisplay] = useState<ITransactionResponse[]>([...transactions]);
   const [dateTransactions, setDateTransactions] = useState<ITransactionResponse[]>([]);
-  // const [cashInTransactions, setCashInTransactions] = useState<ITransactionResponse[]>([]);
-  // const [cashOutTransactions, setCashOutTransactions] = useState<ITransactionResponse[]>([]);
   const [date, setDate] = useState<string>('');
 
   const navigate = useNavigate();

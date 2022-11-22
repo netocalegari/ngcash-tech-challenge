@@ -4,12 +4,9 @@ services:
   db:
     image: postgres:latest
     restart: unless-stopped
-    environment:
-      - POSTGRES_DB=ngcash
-      - POSTGRES_USER=neto
-      - POSTGRES_PASSWORD=1234
+    env_file: ./server-side/.env
     ports:
-      - '5433:5432'
+      - 5434:5432
 
   server:
     build: 
@@ -19,10 +16,15 @@ services:
     volumes:
       - .:/app
     env_file: ./server-side/.env
-    command: yarn typeorm migration:run -d src/data-source
+    command: sh -c 'yarn typeorm migration:run -d src/data-source && yarn dev'
+    ports:
+      - 3000:3000
 
   client:
+    depends_on:
+      - server
     build:
       context: ./client-side
     ports:
-      - "3000:3000"
+      - 3001:3000
+    command: yarn start
