@@ -22,8 +22,8 @@ const Head = styled.header`
       border-style: none;
       border-radius: 6px;
 
-      background-color: #FD377E;  
-      color: #FFFFFF;
+      background-color: #fd377e;
+      color: #ffffff;
     }
   }
 `;

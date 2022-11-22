@@ -1,121 +1,129 @@
 import { FormEvent, useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Header from "../../components/Header";
-import {  FormContainer, ListContainer, ListHeader, Main } from "./styles";
+import { FormContainer, ListContainer, ListHeader, Main } from "./styles";
 import EmptyCard from "../../components/EmptyCard";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 interface ITransactionResponse {
   created_at: string;
   id: string;
   value: number;
-};
+}
 
 interface ITransactionRequest {
   username: string;
   amount: number;
-};
+}
 
 function DashboardPage() {
   const token = sessionStorage.getItem("@ngcash:token");
   const [userBalance, setUserBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<ITransactionResponse[]>([]);
-  const [display, setDisplay] = useState<ITransactionResponse[]>([...transactions]);
+  const [display, setDisplay] = useState<ITransactionResponse[]>([
+    ...transactions,
+  ]);
   const [dateTransactions] = useState<ITransactionResponse[]>([]);
-  const [date, setDate] = useState<string>('');
+  const [date, setDate] = useState<string>("");
 
   const navigate = useNavigate();
 
   const schema = yup.object().shape({
-    username: yup.string().required('Campo obrigatório'),
-    amount: yup.number().required('Campo obrigatório')
+    username: yup.string().required("Campo obrigatório"),
+    amount: yup.number().required("Campo obrigatório"),
   });
 
-  const { register, handleSubmit} = useForm<ITransactionRequest> ({
+  const { register, handleSubmit } = useForm<ITransactionRequest>({
     resolver: yupResolver(schema),
   });
 
   function makeTransaction(data: ITransactionRequest) {
-    api.patch('/dashboard/transaction', data, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then((res) => {
-      toast.success('Transação realizada')
-      setUserBalance(userBalance - res.data.value)
-      setDisplay(transactions);
-    })
-    .catch((err) => {
-      toast.error(`${err.response.data.message}`)
-      console.log(err)
-    });
-  };
+    api
+      .patch("/dashboard/transaction", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        toast.success("Transação realizada");
+        setUserBalance(userBalance - res.data.value);
+        setDisplay(transactions);
+      })
+      .catch((err) => {
+        toast.error(`${err.response.data.message}`);
+        console.log(err);
+      });
+  }
 
   function showAllTransactions() {
     setDisplay(transactions);
     console.log(display);
-  };
+  }
 
   function filterByDate(event: FormEvent) {
     event.preventDefault();
-    
-    api.post('/dashboard/transaction/filter/date', {
-      date: date
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => {
-      res.data.length > 0 && (
-        setDisplay(res.data)
+
+    api
+      .post(
+        "/dashboard/transaction/filter/date",
+        {
+          date: date,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
-    })
-    .catch((err) => {
-      toast.error(`${err.response.data.message}`)
-      console.log(err)
-    });
-  };
+      .then((res) => {
+        res.data.length > 0 && setDisplay(res.data);
+      })
+      .catch((err) => {
+        toast.error(`${err.response.data.message}`);
+        console.log(err);
+      });
+  }
 
   function filterCashIn() {
-    api.get('/dashboard/transaction/filter/cashIn', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => {
-      setDisplay(res.data);
-    })
-    .catch((err) => {
-      toast.error(`${err.response.data.message}`)
-      console.log(err)
-    });
-  };
+    api
+      .get("/dashboard/transaction/filter/cashIn", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setDisplay(res.data);
+      })
+      .catch((err) => {
+        toast.error(`${err.response.data.message}`);
+        console.log(err);
+      });
+  }
 
   function filterCashOut() {
-    api.get('/dashboard/transaction/filter/cashOut', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => {
-      setDisplay(res.data);
-    })
-    .catch((err) => {
-      toast.error(`${err.response.data.message}`)
-      console.log(err)
-    });
-  };
+    api
+      .get("/dashboard/transaction/filter/cashOut", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setDisplay(res.data);
+      })
+      .catch((err) => {
+        toast.error(`${err.response.data.message}`);
+        console.log(err);
+      });
+  }
 
   useEffect(() => {
     if (!token) {
-      navigate('/login');
-    };
+      navigate("/login");
+    }
 
     api
       .get("/dashboard", {
@@ -139,31 +147,31 @@ function DashboardPage() {
         setDisplay(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [token, navigate]);
 
   return (
     <>
-      <Header/>
+      <Header />
 
       <Main>
         <FormContainer>
           <form onSubmit={handleSubmit(makeTransaction)}>
             <div className="input-holder">
               <label htmlFor="">Conta destino</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Username destino"
-                {...register('username')}
+                {...register("username")}
               />
             </div>
-            
+
             <div className="input-holder">
               <label htmlFor="">Valor</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Quantidade a enviar"
-                {...register('amount')}
-              />            
+                {...register("amount")}
+              />
             </div>
 
             <button type="submit">Enviar</button>
@@ -174,7 +182,7 @@ function DashboardPage() {
             <p id="value-amount">R${userBalance}</p>
           </div>
         </FormContainer>
-      
+
         <div className="list-holder">
           <ListHeader>
             <h3>Transações</h3>
@@ -185,58 +193,47 @@ function DashboardPage() {
             </div>
 
             <form onSubmit={filterByDate}>
+              <input
+                type="date"
+                onChange={(event) => setDate(event.target.value)}
+                id="date-input"
+              />
 
-            <input type="date"
-              onChange={(event) => setDate(event.target.value)}
-              id='date-input'
-            />
-
-            <button type="submit">Filtrar</button>
-
-          </form>
+              <button type="submit">Filtrar</button>
+            </form>
           </ListHeader>
 
           {display.length > 0 ? (
-              <ListContainer>
-                <ul>
-                  {display.map((transaction) => (
-                    <li key={transaction.id}>
-                      <p id="date">Data: {transaction.created_at}</p>
-                      <p>R${transaction.value}</p>
-                    </li>
-                  ))}
-                </ul>
-              </ListContainer>
-            ) :
-            
+            <ListContainer>
+              <ul>
+                {display.map((transaction) => (
+                  <li key={transaction.id}>
+                    <p id="date">Data: {transaction.created_at}</p>
+                    <p>R${transaction.value}</p>
+                  </li>
+                ))}
+              </ul>
+            </ListContainer>
+          ) : (
             <>
-              <EmptyCard/>
-              <EmptyCard/>
-              <EmptyCard/>
+              <EmptyCard />
+              <EmptyCard />
+              <EmptyCard />
             </>
-          }
-
+          )}
         </div>
-
       </Main>
 
-      
-
-      
-      
-
-      {
-        dateTransactions.length > 0 && (
-          <ul>
-            {dateTransactions.map((transaction) => (
-              <li key={transaction.id}>
-                <p>{transaction.created_at}</p>
-                <p>{transaction.value}</p>
-              </li>
-            ))}
-          </ul>
-        )
-      }
+      {dateTransactions.length > 0 && (
+        <ul>
+          {dateTransactions.map((transaction) => (
+            <li key={transaction.id}>
+              <p>{transaction.created_at}</p>
+              <p>{transaction.value}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }

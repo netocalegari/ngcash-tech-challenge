@@ -8,25 +8,30 @@ const listTransactionsService = async (id: string): Promise<Transaction[]> => {
   const userRepository = AppDataSource.getRepository(User);
 
   const user = await userRepository.findOneBy({
-    id: id
+    id: id,
   });
 
-  if (!user ) {
-    throw new AppError(404, 'User not found');
-  };
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
 
   const transactions = await transactionsRepository.find({
-    where: [{
-      debited_account: user.account_id
-    },
-    {
-      credited_account: user.account_id
-    }]
+    where: [
+      {
+        debited_account: user.account_id,
+      },
+      {
+        credited_account: user.account_id,
+      },
+    ],
   });
 
   if (transactions.length < 1) {
-    throw new AppError(404, 'No transactions have been made involving this account')
-  };
+    throw new AppError(
+      404,
+      "No transactions have been made involving this account"
+    );
+  }
 
   return transactions;
 };

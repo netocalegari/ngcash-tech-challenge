@@ -7,16 +7,16 @@ const checkBalanceService = async (id: string): Promise<User> => {
 
   const user = await userRepository.findOne({
     where: {
-      id: id
+      id: id,
     },
     relations: {
-      account_id: true
-    }
+      account_id: true,
+    },
   });
 
   if (!user) {
-    throw new AppError(404, 'User not found');
-  };
+    throw new AppError(404, "User not found");
+  }
 
   return user;
 };

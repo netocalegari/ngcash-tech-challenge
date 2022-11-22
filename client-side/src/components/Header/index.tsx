@@ -6,8 +6,8 @@ function Header() {
 
   function logOut() {
     sessionStorage.clear();
-    navigate('/login');
-  };
+    navigate("/login");
+  }
 
   return (
     <Head>
@@ -19,7 +19,7 @@ function Header() {
         <button onClick={logOut}>Logout</button>
       </div>
     </Head>
-  )
-};
+  );
+}
 
 export default Header;

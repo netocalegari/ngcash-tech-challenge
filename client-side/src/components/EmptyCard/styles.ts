@@ -9,9 +9,9 @@ const Container = styled.div`
   margin-bottom: 2rem;
   margin-left: 16rem;
 
-  background-color: #F8F9FA;
+  background-color: #f8f9fa;
 
-  border-left: 4px solid #E9ECEF;
+  border-left: 4px solid #e9ecef;
   border-radius: 4px;
 
   height: 5.5rem;
@@ -20,7 +20,7 @@ const Container = styled.div`
     width: 20.5rem;
     height: 0.8rem;
 
-    background-color: #E9ECEF;
+    background-color: #e9ecef;
 
     margin-left: 1rem;
   }
@@ -30,10 +30,9 @@ const SmallDiv = styled.div`
   width: 10rem;
   height: 0.8rem;
 
-  background-color: #E9ECEF;
+  background-color: #e9ecef;
 
   margin-left: 1rem;
 `;
 
-
-export {Container, SmallDiv};
+export { Container, SmallDiv };

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Main = styled.main`
   display: flex;
@@ -35,7 +35,7 @@ const Main = styled.main`
           border-style: none;
           border-radius: 3px;
 
-          background-color: #F5F2F2;
+          background-color: #f5f2f2;
         }
 
         .error-message {
@@ -51,13 +51,13 @@ const Main = styled.main`
         border-style: none;
         border-radius: 3px;
 
-        background-color: #FD377E;
-        color: #FFFFFF
+        background-color: #fd377e;
+        color: #ffffff;
       }
     }
   }
 
-  @media(min-width: 1024px) {
+  @media (min-width: 1024px) {
     .container {
       form {
         .input-holder {

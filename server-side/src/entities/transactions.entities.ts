@@ -1,17 +1,18 @@
-import { Entity, 
+import {
+  Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  ManyToOne
+  ManyToOne,
 } from "typeorm";
 import { Account } from "./accounts.entities";
 
-@Entity('transactions')
+@Entity("transactions")
 class Transaction {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   readonly id!: string;
 
-  @CreateDateColumn({type: 'date'})
+  @CreateDateColumn({ type: "date" })
   created_at!: Date;
 
   @ManyToOne(() => Account, (account) => account.id)
@@ -20,8 +21,8 @@ class Transaction {
   @ManyToOne(() => Account, (account) => account.id)
   credited_account!: Account;
 
-  @Column({type: 'decimal', precision: 12, scale: 2})
+  @Column({ type: "decimal", precision: 12, scale: 2 })
   value!: number;
-};
+}
 
 export { Transaction };

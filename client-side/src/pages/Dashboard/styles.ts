@@ -15,7 +15,7 @@ const FormContainer = styled.div`
   width: 23rem;
   height: 19rem;
 
-  border: 1px solid #E9ECEF;
+  border: 1px solid #e9ecef;
   border-radius: 4px;
 
   form {
@@ -39,7 +39,7 @@ const FormContainer = styled.div`
         border-style: none;
         border-radius: 4px;
 
-        background-color: #F5F2F2;
+        background-color: #f5f2f2;
       }
     }
 
@@ -52,8 +52,8 @@ const FormContainer = styled.div`
       border-style: none;
       border-radius: 4px;
 
-      background-color: #FD377E;
-      color: #FFFFFF
+      background-color: #fd377e;
+      color: #ffffff;
     }
   }
 
@@ -83,10 +83,9 @@ const ListHeader = styled.div`
       margin-left: 1rem;
       width: 7rem;
       height: 2rem;
-  
+
       border-style: none;
       border-radius: 4px;
-  
     }
 
     button {
@@ -121,13 +120,16 @@ const ListHeader = styled.div`
 const ListContainer = styled.div`
   margin-left: 13.5rem;
 
+  height: 78vh;
+  overflow-y: auto;
+
   ul {
     li {
       display: flex;
       align-items: center;
       list-style: none;
 
-      background-color: #F8F9FA;
+      background-color: #f8f9fa;
       border-radius: 5px;
 
       height: 5rem;

@@ -1,22 +1,25 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from 'jsonwebtoken';
-import 'dotenv/config';
+import jwt from "jsonwebtoken";
+import "dotenv/config";
 import { AppError } from "../errors/appError";
-import { nextTick } from "process";
 
-const ensureAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
+const ensureAuthMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let token = req.headers.authorization;
 
   if (!token) {
-    throw new AppError(401, 'Invalid token');
-  };
+    throw new AppError(401, "Invalid token");
+  }
 
-  token = token.split(' ')[1];
+  token = token.split(" ")[1];
 
-  jwt.verify(token, process.env.SECRET_KEY as string, (error, decoded:any) => {
+  jwt.verify(token, process.env.SECRET_KEY as string, (error, decoded: any) => {
     if (error) {
-      throw new AppError(401, 'Invalid token');
-    };
+      throw new AppError(401, "Invalid token");
+    }
 
     req.user = {
       id: decoded.id,

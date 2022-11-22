@@ -83,7 +83,7 @@ const filterDateTransactionsController = async (req: Request, res: Response) => 
 
 const filterCashInTransactionsController = async (req: Request, res: Response) => {
   const id = req.user.id;
-  const { cashIn } = req.body;
+
   try {
     const transactions = await filterCashInTransactionsService(id);
 
@@ -97,7 +97,7 @@ const filterCashInTransactionsController = async (req: Request, res: Response) =
 
 const filterCashOutTransactionsController = async (req: Request, res: Response) => {
   const id = req.user.id;
-  const { cashOut } = req.body;
+
   try {
     const transactions = await filterCashOutTransactionsService(id);
 

@@ -1,82 +1,90 @@
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import api from '../../services/api';
-import { Main } from './styles';
-import { toast } from 'react-toastify';
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import api from "../../services/api";
+import { Main } from "./styles";
+import { toast } from "react-toastify";
 interface ILoginRequest {
   username: string;
   password: string;
-};
+}
 
 function LoginForm() {
   const navigate = useNavigate();
 
   const schema = yup.object().shape({
-    username: yup.string().required('Campo obrigatório'),
-    password: yup.string().required('Campo obrigatório'),
+    username: yup.string().required("Campo obrigatório"),
+    password: yup.string().required("Campo obrigatório"),
   });
 
-  const { register, handleSubmit, formState: { errors }} = useForm<ILoginRequest> ({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILoginRequest>({
     resolver: yupResolver(schema),
   });
 
   function handleSubmitedData(data: ILoginRequest) {
-    api.post('/login', data)
+    api
+      .post("/login", data)
       .then((res) => {
         if (res.status === 200) {
           sessionStorage.clear();
-          sessionStorage.setItem('@ngcash:token', res.data.token);
-          navigate('/dashboard', {replace: true});
+          sessionStorage.setItem("@ngcash:token", res.data.token);
+          navigate("/dashboard", { replace: true });
         }
       })
       .catch((err) => {
         toast.error(`${err.response.data.message}`);
         console.log(err);
       });
-  };
+  }
 
   function redirectToRegisterPage() {
-    navigate('/register');
-  };
+    navigate("/register");
+  }
 
   return (
     <Main>
       <h1>Login</h1>
-      <div className='container'>
+      <div className="container">
         <form onSubmit={handleSubmit(handleSubmitedData)}>
-          <div className='input-holder'>
+          <div className="input-holder">
             <label htmlFor="">Username</label>
-            <input 
+            <input
               type="text"
-              placeholder='digite seu username'
-              {...register('username')}
+              placeholder="digite seu username"
+              {...register("username")}
             />
-            <p className='error-message'>{errors.username?.message}</p>
+            <p className="error-message">{errors.username?.message}</p>
           </div>
 
-          <div className='input-holder'>
+          <div className="input-holder">
             <label htmlFor="">Senha</label>
-            <input 
+            <input
               type="password"
-              placeholder='digite sua senha'
-              {...register('password')}
+              placeholder="digite sua senha"
+              {...register("password")}
             />
-            <p className='error-message'>{errors.password?.message}</p>
+            <p className="error-message">{errors.password?.message}</p>
           </div>
 
-          <button className='login-button' type='submit'>Logar</button>
+          <button className="login-button" type="submit">
+            Logar
+          </button>
         </form>
 
-        <div className='register-holder'>
+        <div className="register-holder">
           <p>Não possui uma conta? </p>
-          <button className='register-button' onClick={redirectToRegisterPage}>Cadastre-se</button>
+          <button className="register-button" onClick={redirectToRegisterPage}>
+            Cadastre-se
+          </button>
         </div>
       </div>
     </Main>
   );
-
-};
+}
 
 export default LoginForm;
