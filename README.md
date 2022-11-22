@@ -4,11 +4,13 @@ Este é um desafio técnico para o processo seletivo da vaga backend jr. para a 
 
 Para iniciar o projeto, basta rodar "docker-compose up --build" caso seja a primeira vez ou "docker-compose up".
 
-Feito isso, para acessar o endereço da aplicação frontend, 
+Feito isso, para acessar o endereço da aplicação frontend, acessar:
+ - http://localhost:3000/
 
 # Endpoints
 
-BaseURL: http://localhost:3000/
+BaseURL: 
+- http://localhost:3000/
 
 Criação de de usuário:
 
