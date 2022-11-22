@@ -1,63 +1,35 @@
-// import { Request, Response, NextFunction} from 'express';
-// import { AppError } from '../errors/appError';
-// import * as yup from 'yup';
-// import { SchemaOf } from 'yup';
-// import { IUserRequest } from '../interfaces/user';
+import { Request, Response, NextFunction} from 'express';
+import { AppError } from '../errors/appError';
+import * as yup from 'yup';
+import { SchemaOf } from 'yup';
+import { IUserRequest } from '../interfaces/user';
 
-// export const createUserSchema: SchemaOf<IUserRequest> = yup.object().shape({
-//   password: yup.string()
-//     .min(8)
-//     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/, 'Deve must have at least 8 characters, one uppercase letter, one lowercase letter, one number and a special character')
-// });
+const ensurePasswordSafetyMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const { password } = req.body;
 
-// export const validatePassword = (schema: SchemaOf<IUserRequest>) => {
-//   async (
-//     req: Request,
-//     res: Response,
-//     next: NextFunction) => {
-//       try {
-//         const data = req.body;
+  const passwordErrors = [];
 
-//         try {
-//           const validatedData = await schema.validate(
-//             data,
-//             {
-//               abortEarly: false,
-//               stripUnknown: true
-//             })
-            
-//             req.newUser = validatedData;
+  if (password.length < 8) {
+    passwordErrors.push(' Password must contain at least 8 characters');
+  };
+  // if (password.includes('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')) {
+  //   throw new AppError(400, 'Password must have at least 8 characters, one uppercase letter, one lowercase letter and a number');
+  // };
 
-//             return next();
-//           } catch(err: any) {
-//             return res.status(400).json({
-//               error: err.errors?.join(', ')
-//               })
-//             }
-//       } catch(err) {
-//         return next(err);
-//     };
-//   };
-// };
+  // const uppercase = new
+  if (!new RegExp(/^(.*[A-Z].*)$/).test(password)) {
+    passwordErrors.push(' Password must contain at least one uppercase letter');
+  };
 
+  if (!new RegExp(/^(.*[0-9].*)$/).test(password)) {
+    passwordErrors.push(' Password must contain at least one number');
+  }
 
+  if (passwordErrors.length > 0) {
+    throw new AppError(400, passwordErrors.toString());
+  }
 
-// const ensurePasswordSafetyMiddleware = (req: Request, res: Response, next: NextFunction) => {
-//   const { password } = req.body;
+  return next();
+};
 
-//   if (password.includes('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')) {
-//     throw new AppError(400, 'Password must have at least 8 characters, one uppercase letter, one lowercase letter and a number');
-//   };
-
-//   if (!password.split('').includes(/^(.*[A-Z].*)$/)) {
-//     throw new AppError(400, 'Password must have at least one uppercase letter')
-//   }
-
-//   if (!password.split('').includes(/^(.*[0-9].*)$/)) {
-//     throw new AppError(400, 'Password must have at least one number')
-//   }
-
-//   return next();
-// };
-
-// export default ensurePasswordSafetyMiddleware;
+export default ensurePasswordSafetyMiddleware;

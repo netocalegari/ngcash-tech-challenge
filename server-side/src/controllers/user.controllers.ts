@@ -73,7 +73,7 @@ const filterDateTransactionsController = async (req: Request, res: Response) => 
   try {
     const transactions = await filterDateTransactionsService(id, date);
 
-    return res.status(200).json(transactions);
+    return res.status(200).json(instanceToPlain(transactions));
   } catch(err) {
     if(err instanceof AppError) {
       handleError(err, res);
@@ -87,7 +87,7 @@ const filterCashInTransactionsController = async (req: Request, res: Response) =
   try {
     const transactions = await filterCashInTransactionsService(id);
 
-    return res.status(200).json(transactions);
+    return res.status(200).json(instanceToPlain(transactions));
   } catch(err) {
     if (err instanceof AppError) {
       handleError(err, res);
@@ -101,7 +101,7 @@ const filterCashOutTransactionsController = async (req: Request, res: Response) 
   try {
     const transactions = await filterCashOutTransactionsService(id);
 
-    return res.status(200).json(transactions);
+    return res.status(200).json(instanceToPlain(transactions));
   } catch(err) {
     if (err instanceof AppError) {
       handleError(err, res);
