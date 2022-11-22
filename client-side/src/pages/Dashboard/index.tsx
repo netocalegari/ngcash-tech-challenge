@@ -5,7 +5,9 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Header from "../../components/Header";
-import { FormContainer, ListContainer, ListHeader, Main } from "./styles";
+import {  FormContainer, ListContainer, ListHeader, Main } from "./styles";
+import EmptyCard from "../../components/EmptyCard";
+import { toast } from 'react-toastify';
 
 interface ITransactionResponse {
   created_at: string;
@@ -23,7 +25,7 @@ function DashboardPage() {
   const [userBalance, setUserBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<ITransactionResponse[]>([]);
   const [display, setDisplay] = useState<ITransactionResponse[]>([...transactions]);
-  const [dateTransactions, setDateTransactions] = useState<ITransactionResponse[]>([]);
+  const [dateTransactions] = useState<ITransactionResponse[]>([]);
   const [date, setDate] = useState<string>('');
 
   const navigate = useNavigate();
@@ -33,7 +35,7 @@ function DashboardPage() {
     amount: yup.number().required('Campo obrigatório')
   });
 
-  const { register, handleSubmit, formState: { errors }} = useForm<ITransactionRequest> ({
+  const { register, handleSubmit} = useForm<ITransactionRequest> ({
     resolver: yupResolver(schema),
   });
 
@@ -44,10 +46,14 @@ function DashboardPage() {
       }
     })
     .then((res) => {
+      toast.success('Transação realizada')
       setUserBalance(userBalance - res.data.value)
       setDisplay(transactions);
     })
-    .catch(err => console.log(err));
+    .catch((err) => {
+      toast.error(`${err.response.data.message}`)
+      console.log(err)
+    });
   };
 
   function showAllTransactions() {
@@ -70,7 +76,10 @@ function DashboardPage() {
         setDisplay(res.data)
       )
     })
-    .catch(err => console.log(err));
+    .catch((err) => {
+      toast.error(`${err.response.data.message}`)
+      console.log(err)
+    });
   };
 
   function filterCashIn() {
@@ -82,7 +91,10 @@ function DashboardPage() {
     .then((res) => {
       setDisplay(res.data);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      toast.error(`${err.response.data.message}`)
+      console.log(err)
+    });
   };
 
   function filterCashOut() {
@@ -94,7 +106,10 @@ function DashboardPage() {
     .then((res) => {
       setDisplay(res.data);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      toast.error(`${err.response.data.message}`)
+      console.log(err)
+    });
   };
 
   useEffect(() => {
@@ -160,42 +175,46 @@ function DashboardPage() {
           </div>
         </FormContainer>
       
-        <div>
-        <ListHeader>
-          <h3>Transações</h3>
-          <div className="button-holder">
-            <button onClick={showAllTransactions}>Todos</button>
-            <button onClick={filterCashIn}>Entrada</button>
-            <button onClick={filterCashOut}>Saída</button>
-          </div>
+        <div className="list-holder">
+          <ListHeader>
+            <h3>Transações</h3>
+            <div className="button-holder">
+              <button onClick={showAllTransactions}>Todos</button>
+              <button onClick={filterCashIn}>Entrada</button>
+              <button onClick={filterCashOut}>Saída</button>
+            </div>
 
-          <form onSubmit={filterByDate}>
+            <form onSubmit={filterByDate}>
 
-          <input type="date"
-            onChange={(event) => setDate(event.target.value)}
-            id='date-input'
-          />
+            <input type="date"
+              onChange={(event) => setDate(event.target.value)}
+              id='date-input'
+            />
 
-          <button type="submit">Filtrar</button>
+            <button type="submit">Filtrar</button>
 
-        </form>
-        </ListHeader>
+          </form>
+          </ListHeader>
 
-        {display.length > 0 ? (
-          <ListContainer>
-            <ul>
-              {display.map((transaction) => (
-                <li key={transaction.id}>
-                  <p id="date">Data: {transaction.created_at}</p>
-                  <p>R${transaction.value}</p>
-                </li>
-              ))}
-            </ul>
-          </ListContainer>
-        ) :
-
-        <h1>Nenhuma transação realizada</h1>
-      }
+          {display.length > 0 ? (
+              <ListContainer>
+                <ul>
+                  {display.map((transaction) => (
+                    <li key={transaction.id}>
+                      <p id="date">Data: {transaction.created_at}</p>
+                      <p>R${transaction.value}</p>
+                    </li>
+                  ))}
+                </ul>
+              </ListContainer>
+            ) :
+            
+            <>
+              <EmptyCard/>
+              <EmptyCard/>
+              <EmptyCard/>
+            </>
+          }
 
         </div>
 

@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import api from '../../services/api';
 import { Main } from './styles';
+import { toast } from 'react-toastify';
 interface ILoginRequest {
   username: string;
   password: string;
@@ -31,6 +32,7 @@ function LoginForm() {
         }
       })
       .catch((err) => {
+        toast.error(`${err.response.data.message}`);
         console.log(err);
       });
   };

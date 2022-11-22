@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import api from '../../services/api';
 import { Main } from './styles';
+import { toast } from 'react-toastify';
 
 interface IRegisterRequest {
   username: string;
@@ -27,10 +28,12 @@ function RegisterForm() {
     api.post('/register', data)
       .then((res) => {
         if (res.status === 201) {
+          toast.success('Usuário criado');
           navigate('/login');
         };
       })
       .catch((err) => {
+        toast.error(`${err.response.data.message}`);
         console.log(err);
       });
   };
