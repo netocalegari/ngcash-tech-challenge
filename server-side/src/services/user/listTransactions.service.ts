@@ -36,4 +36,4 @@ const listTransactionsService = async (id: string): Promise<Transaction[]> => {
   return transactions;
 };
 
-export default listTransactionsService;
+export { listTransactionsService };

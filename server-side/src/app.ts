@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { AppError } from "./errors/appError";
-import sessionRoutes from "./routes/session.routes";
-import userRoutes from "./routes/user.routes";
+import { sessionRoutes } from "./routes/session.routes";
+import { userRoutes } from "./routes/user.routes";
 import cors from "cors";
 
 const app = express();

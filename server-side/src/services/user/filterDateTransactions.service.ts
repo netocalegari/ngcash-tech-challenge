@@ -31,4 +31,4 @@ const filterDateTransactionsService = async (
   return transactions;
 };
 
-export default filterDateTransactionsService;
+export { filterDateTransactionsService };

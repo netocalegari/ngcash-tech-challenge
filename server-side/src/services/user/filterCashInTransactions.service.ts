@@ -30,4 +30,4 @@ const filterCashInTransactionsService = async (
   return cashInTransactions;
 };
 
-export default filterCashInTransactionsService;
+export { filterCashInTransactionsService };

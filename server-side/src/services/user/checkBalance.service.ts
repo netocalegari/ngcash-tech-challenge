@@ -21,4 +21,4 @@ const checkBalanceService = async (id: string): Promise<User> => {
   return user;
 };
 
-export default checkBalanceService;
+export { checkBalanceService };

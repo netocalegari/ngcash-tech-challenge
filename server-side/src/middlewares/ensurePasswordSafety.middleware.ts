@@ -1,35 +1,32 @@
-import { Request, Response, NextFunction} from 'express';
-import { AppError } from '../errors/appError';
-import * as yup from 'yup';
-import { SchemaOf } from 'yup';
-import { IUserRequest } from '../interfaces/user';
+import { Request, Response, NextFunction } from "express";
+import { AppError } from "../errors/appError";
 
-const ensurePasswordSafetyMiddleware = (req: Request, res: Response, next: NextFunction) => {
+const ensurePasswordSafetyMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { password } = req.body;
 
   const passwordErrors = [];
 
   if (password.length < 8) {
-    passwordErrors.push(' Password must contain at least 8 characters');
-  };
-  // if (password.includes('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$')) {
-  //   throw new AppError(400, 'Password must have at least 8 characters, one uppercase letter, one lowercase letter and a number');
-  // };
+    passwordErrors.push(" Password must contain at least 8 characters");
+  }
 
-  // const uppercase = new
   if (!new RegExp(/^(.*[A-Z].*)$/).test(password)) {
-    passwordErrors.push(' Password must contain at least one uppercase letter');
-  };
+    passwordErrors.push(" Password must contain at least one uppercase letter");
+  }
 
   if (!new RegExp(/^(.*[0-9].*)$/).test(password)) {
-    passwordErrors.push(' Password must contain at least one number');
+    passwordErrors.push(" Password must contain at least one number");
   }
 
   if (passwordErrors.length > 0) {
-    throw new AppError(400, passwordErrors.toString());
+    throw new AppError(400, passwordErrors.toString().replace(/^[^\s]*\s/, ""));
   }
 
   return next();
 };
 
-export default ensurePasswordSafetyMiddleware;
+export { ensurePasswordSafetyMiddleware };

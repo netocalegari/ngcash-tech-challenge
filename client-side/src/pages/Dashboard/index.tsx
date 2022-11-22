@@ -43,7 +43,7 @@ function DashboardPage() {
 
   function makeTransaction(data: ITransactionRequest) {
     api
-      .patch("/dashboard/transaction", data, {
+      .patch("/transaction", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -51,7 +51,7 @@ function DashboardPage() {
       .then((res) => {
         toast.success("Transação realizada");
         setUserBalance(userBalance - res.data.value);
-        setDisplay(transactions);
+        setDisplay([...transactions, res.data]);
       })
       .catch((err) => {
         toast.error(`${err.response.data.message}`);
@@ -69,7 +69,7 @@ function DashboardPage() {
 
     api
       .post(
-        "/dashboard/transaction/filter/date",
+        "/transaction/filter/date",
         {
           date: date,
         },
@@ -90,7 +90,7 @@ function DashboardPage() {
 
   function filterCashIn() {
     api
-      .get("/dashboard/transaction/filter/cashIn", {
+      .get("/transaction/filter/cashIn", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -106,7 +106,7 @@ function DashboardPage() {
 
   function filterCashOut() {
     api
-      .get("/dashboard/transaction/filter/cashOut", {
+      .get("/transaction/filter/cashOut", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -126,7 +126,7 @@ function DashboardPage() {
     }
 
     api
-      .get("/dashboard", {
+      .get("/user", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -137,7 +137,7 @@ function DashboardPage() {
       .catch((err) => console.log(err));
 
     api
-      .get("/dashboard/transaction", {
+      .get("/transaction", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

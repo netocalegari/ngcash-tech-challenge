@@ -30,4 +30,4 @@ const ensureAuthMiddleware = (
   });
 };
 
-export default ensureAuthMiddleware;
+export { ensureAuthMiddleware };

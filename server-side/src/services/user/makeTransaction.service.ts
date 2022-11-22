@@ -63,4 +63,4 @@ const makeTransaction = async ({
   return completedTransaction;
 };
 
-export default makeTransaction;
+export { makeTransaction };

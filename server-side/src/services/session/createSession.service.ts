@@ -41,4 +41,4 @@ const createSessionService = async ({
   return token;
 };
 
-export default createSessionService;
+export { createSessionService };

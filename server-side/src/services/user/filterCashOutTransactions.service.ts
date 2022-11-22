@@ -30,4 +30,4 @@ const filterCashOutTransactionsService = async (
   return cashOutTransactions;
 };
 
-export default filterCashOutTransactionsService;
+export { filterCashOutTransactionsService };

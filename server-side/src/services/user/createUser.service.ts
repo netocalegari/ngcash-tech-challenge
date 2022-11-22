@@ -51,4 +51,4 @@ const createUserService = async ({
   return createdUser!;
 };
 
-export default createUserService;
+export { createUserService };

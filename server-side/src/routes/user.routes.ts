@@ -8,39 +8,41 @@ import {
   listTransactionsController,
   makeTransactionController,
 } from "../controllers/user.controllers";
-import ensureAuthMiddleware from "../middlewares/ensureAuth.middleware";
-import ensurePasswordSafetyMiddleware from "../middlewares/ensurePasswordSafety.middleware";
-// import { createUserSchema } from "../middlewares/ensurePasswordSafety.middleware";
-// import ensurePasswordSafetyMiddleware from "../middlewares/ensurePasswordSafety.middleware";
+import {ensureAuthMiddleware} from "../middlewares/ensureAuth.middleware";
+import { ensurePasswordSafetyMiddleware } from "../middlewares/ensurePasswordSafety.middleware";
 
 const userRoutes = Router();
 
-userRoutes.post("/register", ensurePasswordSafetyMiddleware, createUserController);
-userRoutes.get("/dashboard", ensureAuthMiddleware, checkBalanceController);
+userRoutes.post(
+  "/register",
+  ensurePasswordSafetyMiddleware,
+  createUserController
+);
+userRoutes.get("/user", ensureAuthMiddleware, checkBalanceController);
 userRoutes.patch(
-  "/dashboard/transaction",
+  "/transaction",
   ensureAuthMiddleware,
   makeTransactionController
 );
 userRoutes.get(
-  "/dashboard/transaction",
+  "/transaction",
   ensureAuthMiddleware,
   listTransactionsController
 );
 userRoutes.post(
-  "/dashboard/transaction/filter/date",
+  "/transaction/filter/date",
   ensureAuthMiddleware,
   filterDateTransactionsController
 );
 userRoutes.get(
-  "/dashboard/transaction/filter/cashIn",
+  "/transaction/filter/cashIn",
   ensureAuthMiddleware,
   filterCashInTransactionsController
 );
 userRoutes.get(
-  "/dashboard/transaction/filter/cashOut",
+  "/transaction/filter/cashOut",
   ensureAuthMiddleware,
   filterCashOutTransactionsController
 );
 
-export default userRoutes;
+export { userRoutes };
