@@ -3,7 +3,12 @@ import { Transaction } from "../../entities/transactions.entities";
 import { User } from "../../entities/users.entities";
 import { AppError } from "../../errors/appError";
 
-const listTransactionsService = async (id: string): Promise<Transaction[]> => {
+interface IParams {
+  operation?: 'cashOut' | 'cashIn'
+  'transaction-date'?: Date  
+}
+
+const listTransactionsService = async (id: string, params?: IParams): Promise<Transaction[]> => {
   const transactionsRepository = AppDataSource.getRepository(Transaction);
   const userRepository = AppDataSource.getRepository(User);
 
@@ -26,11 +31,19 @@ const listTransactionsService = async (id: string): Promise<Transaction[]> => {
     ],
   });
 
-  if (transactions.length < 1) {
-    throw new AppError(
-      404,
-      "No transactions have been made involving this account"
-    );
+  if (params?.operation === 'cashOut') {
+    const cashOutTransactions = transactions.filter(transaction => transaction.debited_account.id === user.account_id.id);
+    return cashOutTransactions;
+  }
+
+  if (params?.operation === 'cashIn') {
+    const cashInTransactions = transactions.filter(transaction => transaction.credited_account.id === user.account_id.id);
+    return cashInTransactions;
+  }
+
+  if (params?.['transaction-date']) {
+    const sameDateTransactions = transactions.filter(transaction => new Date(transaction.created_at).getDay() === new Date(params?.['transaction-date']!).getDay());
+    return sameDateTransactions;
   }
 
   return transactions;

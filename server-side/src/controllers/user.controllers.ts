@@ -3,9 +3,6 @@ import { Request, Response } from "express";
 import { AppError, handleError } from "../errors/appError";
 import { checkBalanceService } from "../services/user/checkBalance.service";
 import { createUserService } from "../services/user/createUser.service";
-import { filterCashInTransactionsService } from "../services/user/filterCashInTransactions.service";
-import { filterCashOutTransactionsService } from "../services/user/filterCashOutTransactions.service";
-import { filterDateTransactionsService } from "../services/user/filterDateTransactions.service";
 import { listTransactionsService } from "../services/user/listTransactions.service";
 import { makeTransaction } from "../services/user/makeTransaction.service";
 
@@ -56,61 +53,9 @@ const listTransactionsController = async (req: Request, res: Response) => {
   const id = req.user.id;
 
   try {
-    const transactions = await listTransactionsService(id);
+    const transactions = await listTransactionsService(id, req.query);
 
     return res.status(200).json(transactions);
-  } catch (err) {
-    if (err instanceof AppError) {
-      handleError(err, res);
-    }
-  }
-};
-
-const filterDateTransactionsController = async (
-  req: Request,
-  res: Response
-) => {
-  const id = req.user.id;
-  const { date } = req.body;
-
-  try {
-    const transactions = await filterDateTransactionsService(id, date);
-
-    return res.status(200).json(instanceToPlain(transactions));
-  } catch (err) {
-    if (err instanceof AppError) {
-      handleError(err, res);
-    }
-  }
-};
-
-const filterCashInTransactionsController = async (
-  req: Request,
-  res: Response
-) => {
-  const id = req.user.id;
-
-  try {
-    const transactions = await filterCashInTransactionsService(id);
-
-    return res.status(200).json(instanceToPlain(transactions));
-  } catch (err) {
-    if (err instanceof AppError) {
-      handleError(err, res);
-    }
-  }
-};
-
-const filterCashOutTransactionsController = async (
-  req: Request,
-  res: Response
-) => {
-  const id = req.user.id;
-
-  try {
-    const transactions = await filterCashOutTransactionsService(id);
-
-    return res.status(200).json(instanceToPlain(transactions));
   } catch (err) {
     if (err instanceof AppError) {
       handleError(err, res);
@@ -123,7 +68,4 @@ export {
   checkBalanceController,
   makeTransactionController,
   listTransactionsController,
-  filterDateTransactionsController,
-  filterCashInTransactionsController,
-  filterCashOutTransactionsController,
 };

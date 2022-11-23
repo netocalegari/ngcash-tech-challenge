@@ -5,7 +5,7 @@ Este é um desafio técnico para o processo seletivo da vaga backend jr. para a 
 Para iniciar o projeto, basta rodar "docker-compose up --build" caso seja a primeira vez ou "docker-compose up".
 
 Feito isso, para acessar o endereço da aplicação frontend, acessar:
- - http://localhost:3000/
+ - http://localhost:3001/
 
 # Endpoints
 
@@ -153,50 +153,35 @@ Retorno esperado
 
 Filtrar transações por data
 
-- POST /transaction/filter/date
-- Deve estar logado
-
-```json
-{
-  "date": "2022-11-20"
-}
-```
+- GET /transaction?transaction-date=YYYY-MM-DD
+- Deve estar autenticado
 
 Retorno esperado
 
 200 OK
 ```json
 [
-  {
-    "id": "0487bd2b-edd0-4afc-8f08-b8be4f7848f2",
-    "created_at": "2022-11-20",
-    "value": "50.00",
-    "debited_account": {
-      "id": "ad3090cc-f762-42b2-8282-608a8a4e0179"
-    },
-    "credited_account": {
-      "id": "344cf3ed-be1d-4dae-989f-93d134f4940b"
-    }
-  },
-  {
-    "id": "7f78df96-ad5f-47e2-855b-283ab584d04d",
-    "created_at": "2022-11-20",
-    "value": "10.00",
-    "debited_account": {
-      "id": "ad3090cc-f762-42b2-8282-608a8a4e0179"
-    },
-    "credited_account": {
-      "id": "344cf3ed-be1d-4dae-989f-93d134f4940b"
-    }
-  }
+	{
+		"id": "f7006e57-c4d8-40de-a3bc-acf7f44d6a9d",
+		"created_at": "2022-11-23",
+		"value": "10.00",
+		"debited_account": {
+			"balance": 50,
+			"id": "ad3090cc-f762-42b2-8282-608a8a4e0179"
+		},
+		"credited_account": {
+			"balance": 150,
+			"id": "d9a20758-f9b8-4314-8951-9d2e2b665ee3"
+		}
+	}
 ]
 ```
 
-Filtrar transações por cashIn
+Filtrar transações por cash-in
 
-- GET /transaction
+- GET /transaction?operation=cashIn
 - Deve estar autenticado
-    
+
 Retorno esperado
 
 200 OK
@@ -207,9 +192,11 @@ Retorno esperado
 		"created_at": "2022-11-20",
 		"value": "10.00",
 		"debited_account": {
+			"balance": 190,
 			"id": "344cf3ed-be1d-4dae-989f-93d134f4940b"
 		},
 		"credited_account": {
+			"balance": 50,
 			"id": "ad3090cc-f762-42b2-8282-608a8a4e0179"
 		}
 	},
@@ -218,18 +205,20 @@ Retorno esperado
 		"created_at": "2022-11-21",
 		"value": "40.00",
 		"debited_account": {
+			"balance": 150,
 			"id": "d9a20758-f9b8-4314-8951-9d2e2b665ee3"
 		},
 		"credited_account": {
+			"balance": 50,
 			"id": "ad3090cc-f762-42b2-8282-608a8a4e0179"
 		}
-	}
+	} ...
 ]
 ```
 
-Filtrar transações por cashOut
+Filtrar transações por cash-out
 
-- GET /transaction
+- GET /transaction?operation=cashOut
 - Deve estar autenticado
 
 Retorno esperado
@@ -242,9 +231,11 @@ Retorno esperado
 		"created_at": "2022-11-20",
 		"value": "50.00",
 		"debited_account": {
+			"balance": 50,
 			"id": "ad3090cc-f762-42b2-8282-608a8a4e0179"
 		},
 		"credited_account": {
+			"balance": 190,
 			"id": "344cf3ed-be1d-4dae-989f-93d134f4940b"
 		}
 	},
@@ -253,22 +244,13 @@ Retorno esperado
 		"created_at": "2022-11-20",
 		"value": "10.00",
 		"debited_account": {
+			"balance": 50,
 			"id": "ad3090cc-f762-42b2-8282-608a8a4e0179"
 		},
 		"credited_account": {
+			"balance": 190,
 			"id": "344cf3ed-be1d-4dae-989f-93d134f4940b"
 		}
-	},
-	{
-		"id": "65b2fa15-009c-4cd6-9f79-cd7c7a0c6dff",
-		"created_at": "2022-11-20",
-		"value": "10.00",
-		"debited_account": {
-			"id": "ad3090cc-f762-42b2-8282-608a8a4e0179"
-		},
-		"credited_account": {
-			"id": "344cf3ed-be1d-4dae-989f-93d134f4940b"
-		}
-	}
+	}...
 ]
 ```

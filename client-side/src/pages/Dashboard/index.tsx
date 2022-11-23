@@ -61,18 +61,15 @@ function DashboardPage() {
 
   function showAllTransactions() {
     setDisplay(transactions);
-    console.log(display);
+    console.log(transactions);
   }
 
   function filterByDate(event: FormEvent) {
     event.preventDefault();
 
     api
-      .post(
-        "/transaction/filter/date",
-        {
-          date: date,
-        },
+      .get(
+        `/transaction?transaction-date=${date}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -80,7 +77,7 @@ function DashboardPage() {
         }
       )
       .then((res) => {
-        res.data.length > 0 && setDisplay(res.data);
+        setDisplay(res.data);
       })
       .catch((err) => {
         toast.error(`${err.response.data.message}`);
@@ -90,7 +87,7 @@ function DashboardPage() {
 
   function filterCashIn() {
     api
-      .get("/transaction/filter/cashIn", {
+      .get("/transaction?operation=cashIn", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -106,7 +103,7 @@ function DashboardPage() {
 
   function filterCashOut() {
     api
-      .get("/transaction/filter/cashOut", {
+      .get("/transaction?operation=cashOut", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -216,24 +213,13 @@ function DashboardPage() {
             </ListContainer>
           ) : (
             <>
-              <EmptyCard />
-              <EmptyCard />
-              <EmptyCard />
+              <h2 style={{ textAlign: "center" }}>
+                Não foram feitas transações para esta data!
+              </h2>
             </>
           )}
         </div>
       </Main>
-
-      {dateTransactions.length > 0 && (
-        <ul>
-          {dateTransactions.map((transaction) => (
-            <li key={transaction.id}>
-              <p>{transaction.created_at}</p>
-              <p>{transaction.value}</p>
-            </li>
-          ))}
-        </ul>
-      )}
     </>
   );
 }

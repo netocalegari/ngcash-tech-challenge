@@ -58,9 +58,16 @@ const makeTransaction = async ({
   completedTransaction.value = amount;
 
   transactionRepository.create(completedTransaction);
-  transactionRepository.save(completedTransaction);
+  await transactionRepository.save(completedTransaction);
+  const createdTransaction = await transactionRepository.find({
+    where: {
+      debited_account: {
+        id: sendingUser.account_id.id
+      },
+    }
+  });
 
-  return completedTransaction;
+  return createdTransaction[createdTransaction.length - 1];
 };
 
 export { makeTransaction };
